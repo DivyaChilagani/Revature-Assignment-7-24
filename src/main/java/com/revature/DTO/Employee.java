@@ -1,4 +1,4 @@
-package com.revature.W2day04.TASK1;
+package com.revature.DTO;
 
 public class Employee {
     private int employeeId;

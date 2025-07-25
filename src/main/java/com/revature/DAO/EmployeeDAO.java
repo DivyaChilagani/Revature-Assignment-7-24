@@ -1,4 +1,7 @@
-package com.revature.W2day04.TASK1;
+package com.revature.DAO;
+
+import com.revature.DTO.Employee;
+import com.revature.util.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -6,17 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class EmployeeDAO {
-//    private Employee employee;
-    private static final String db_url = "jdbc:mysql://localhost:3306/rev_practice";
-    private static final String user = "root";
-    private static final String password = "Divya#123";
 
     //read all employees
     public List<Employee> getAllEmployees() {
         List<Employee> list = new ArrayList<>();
         String query = "SELECT * FROM employee;";
 
-        try(Connection connection = DriverManager.getConnection(db_url, user, password);
+        try(Connection connection = DBConnection.getConnection();
             PreparedStatement ps = connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery()) {
 
@@ -44,7 +43,7 @@ public class EmployeeDAO {
         String query = "SELECT * FROM employee WHERE employeeId = ?;";
         Employee employee = null;
 
-        try (Connection connection = DriverManager.getConnection(db_url, user, password);
+        try (Connection connection = DBConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setInt(1, employeeId);
@@ -69,7 +68,7 @@ public class EmployeeDAO {
     public void updateDesignation(String newDesignation, int employeeId) {
         String query = "UPDATE employee SET designation = ? WHERE employeeId = ?;";
 
-        try (Connection connection = DriverManager.getConnection(db_url, user, password);
+        try (Connection connection = DBConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setString(1, newDesignation);
@@ -91,7 +90,7 @@ public class EmployeeDAO {
     public boolean deleteEmployee(int employeeId) {
         String query = "DELETE FROM employee WHERE employeeId = ?;";
 
-        try (Connection connection = DriverManager.getConnection(db_url, user, password);
+        try (Connection connection = DBConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setInt(1, employeeId);
@@ -110,7 +109,7 @@ public class EmployeeDAO {
         String query = "SELECT COUNT(*) AS TotalEmployees FROM employee;";
         int count = 0;
 
-        try (Connection connection = DriverManager.getConnection(db_url, user, password);
+        try (Connection connection = DBConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
 
@@ -127,7 +126,7 @@ public class EmployeeDAO {
         String query = "SELECT department, COUNT(*) AS EmployeeCount FROM employee GROUP BY department;";
         HashMap<String, Integer> deptMap = new HashMap<>();
 
-        try (Connection connection = DriverManager.getConnection(db_url, user, password);
+        try (Connection connection = DBConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
 
@@ -145,7 +144,7 @@ public class EmployeeDAO {
     public void insertEmployeeUsingProcedure(int employeeId, String employeeName, String email, String department, String designation, double salary) {
         String callProcedure = "{CALL insertIntoEmployee(?, ?, ?, ?, ?, ?)};";
 
-        try (Connection connection = DriverManager.getConnection(db_url, user, password);
+        try (Connection connection = DBConnection.getConnection();
             CallableStatement cs = connection.prepareCall(callProcedure)) {
 
             cs.setInt(1, employeeId);
